@@ -18,15 +18,31 @@ L = 1
 #gravity, m/s^2
 g = 9.81
 
+""
+# Case 1: 45 degrees
 #Initial Condition
 theta_0 = 45 *np.pi/180 #radians
 omega_0 = 0 #dropped from rest
-
 #Solution Controls
 #timestep
 deltat = 0.01 #seconds
 #number of steps to take
-n = 200
+n = 39
+
+
+"""
+
+#Case 2: 85 degrees
+#Initial Condition
+theta_0 = 85 *np.pi/180 #radians
+omega_0 = 0 #dropped from rest
+#Solution Controls
+#timestep
+deltat = 0.01 #seconds
+#number of steps to take
+n = 97
+
+"""
 
 
 def compute_alpha(g,L,theta):
@@ -82,3 +98,19 @@ def update(frame):
     
 ani = animation.FuncAnimation(fig=fig, func=update, frames=n, interval=.0001)
 plt.show()
+
+
+# Visualize Results
+
+x1 = 0
+y1 = 0
+
+fig, ax = plt.subplots()
+ax.grid(True)
+plt.show()
+ax.axis('equal')
+
+for i in range(n):
+    x2 = L*np.cos(theta[i])
+    y2 = L*np.sin(theta[i])
+    line1 = ax.plot((x1,x2),(y1,y2))
