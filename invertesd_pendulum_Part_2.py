@@ -5,7 +5,7 @@ Created on Fri Dec  1 17:29:08 2023
 
 @author: anthonyferrar
 """
-# This code solves predicts the motion of an inverted pendulum, with a horizontal driving force at the pin
+# This code solves predicts the motion of an inverted pendulum, with a horizontal driving force
 
 #import math
 import numpy as np
@@ -22,9 +22,10 @@ g = 9.81
 ""
 # Case 1: 45 degrees
 #Initial Condition
-FAx_0 = .25 #N
+FAx_0 = 5#.25 #N
+w = 3.2
 Vx_0 = 0 #m/s
-theta_0 = 85 *np.pi/180 #radians
+theta_0 = 75 *np.pi/180 #radians
 omega_0 = 0 #dropped from rest
 X_0 = 0 #start at origin
 #Solution Controls
@@ -41,6 +42,7 @@ alpha_0  = compute_alpha(g,L,theta_0, omega_0,FAx_0)
 OMEGA = omega_0
 ALPHA = alpha_0
 THETA = theta_0
+
 
 FAX = FAx_0
 VX = Vx_0
@@ -64,6 +66,7 @@ endy_start = origin[1] - np.floor(L*np.sin(THETA)*origin[1])
 #Run the sim + animate
 running = True
 frame = 0
+t = 0
 frame_skip = 400
 while running:
     for event in pygame.event.get():
@@ -86,24 +89,25 @@ while running:
     X_NEW = X + VX*deltat
     
     #Update horizontal force, FAX
-    FAX_NEW = FAX #add function here
+    FAX_NEW = FAx_0*np.sin(w*2*np.pi*t) #add function here
     
     #update angular acceleration, alpha
     ALPHA_NEW = compute_alpha(g,L,THETA_NEW, OMEGA_NEW,FAX_NEW)
     
-    #Draw - fix this!!!!!
-    endx = np.floor(L_scale*(L)*np.cos(THETA_NEW)*origin[0]) + origin[0]
-    endy = origin[1] - np.floor(L_scale*L*np.sin(THETA_NEW)*origin[1])
-    
+    #Draw
     if frame%frame_skip == 0:# or frame%frame_skip == 5:
-        if endy < endy_start:
-            screen.fill((0,255, 255))
-        else:
-            screen.fill((255, 255, 255))
-
+        #if endy < endy_start:
+        #    screen.fill((0,255, 255))
+        #else:
+        #    screen.fill((255, 255, 255))
+        startx = np.floor(origin[0] + X_NEW*L_scale*origin[0])
+        endx = np.floor(L_scale*(L)*np.cos(THETA_NEW)*origin[0]) + startx#+ origin[0]
+        endy = origin[1] - np.floor(L_scale*L*np.sin(THETA_NEW)*origin[1])
+        screen.fill((255, 255, 255))
         pygame.draw.line(screen, (255,0,0), origin, (endx_start1, endy_start), 2)
         pygame.draw.line(screen, (255,0,0), origin, (endx_start2, endy_start), 2)
-        pygame.draw.line(screen, (0,0,0), origin, (endx, endy), 4)
+        #pygame.draw.line(screen, (0,0,0), origin, (endx, endy), 4)
+        pygame.draw.line(screen, (0,0,0), (startx, origin[1]), (endx, endy), 4)
         pygame.display.flip()
         clock.tick(60) #fps
     
@@ -114,10 +118,9 @@ while running:
     ALPHA = ALPHA_NEW
     VX    = VX_NEW
     X     = X_NEW
+    t = t+deltat
     FAX   = FAX_NEW
-    
-    
-    
+    print(FAX)
 
 pygame.quit()
 
