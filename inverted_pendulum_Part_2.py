@@ -5,7 +5,12 @@ Created on Fri Dec  1 17:29:08 2023
 
 @author: anthonyferrar
 """
-# This code solves predicts the motion of an inverted pendulum, with a horizontal driving force
+# This code solves predicts the motion of an inverted pendulum, 
+#  with an oscillating horizontal driving force
+# It also animates the pendulum both rotation and translation
+#  The translation causes the pendulum to leave the screen! 
+#  This is when I learned that video games show the character 
+#     stationary and move the background instead.
 
 #import math
 import numpy as np
