@@ -125,7 +125,6 @@ while running:
     X     = X_NEW
     t = t+deltat
     FAX   = FAX_NEW
-    print(FAX)
 
 pygame.quit()
 
